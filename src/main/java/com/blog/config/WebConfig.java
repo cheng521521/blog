@@ -18,7 +18,7 @@ public class WebConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         //省略HttpSecurity的配置
-        httpSecurity.authorizeRequests().antMatchers("/user/login").permitAll().anyRequest().authenticated()
+        httpSecurity.authorizeRequests().antMatchers("/user/login","/arricle/**").permitAll().anyRequest().authenticated()
                 .and().formLogin().failureForwardUrl("/user/login")
                 .and().csrf().disable();
         return httpSecurity.build();

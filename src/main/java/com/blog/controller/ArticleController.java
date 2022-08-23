@@ -1,6 +1,5 @@
 package com.blog.controller;
 
-import com.blog.dto.ArticleDto;
 import com.blog.dto.CommentDto;
 import com.blog.entity.Article;
 import com.blog.entity.Comment;
@@ -29,7 +28,7 @@ import java.util.List;
  * @ClassName ArticleController
  * @Author jackchen
  * @Date 2022/8/23 15:43
- * @Description 发布文章/修改文章
+ * @Description 文章评论/查找/点赞
  **/
 @RestController
 @RequestMapping("/arricle")
@@ -42,21 +41,6 @@ public class ArticleController {
     private CommentService commentService;
     @Autowired
     private RedisUtils redisUtils;
-
-    @PostMapping("/push")
-    public Result pushArticle(@RequestBody ArticleDto articleDto) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDto, article);
-        Article article1 = articleService.save(article);
-        return ResultResponse.getSuccessResult(article1);
-    }
-    @PostMapping("/edit")
-    public Result editArticle(@RequestBody ArticleDto articleDto) {
-        Article article = new Article();
-        BeanUtils.copyProperties(articleDto, article);
-        articleService.edit(article);
-        return ResultResponse.getSuccessResult("修改成功");
-    }
 
     @PostMapping("/comment")
     public Result commentArticle(@RequestBody CommentDto commentDto) {
@@ -75,6 +59,19 @@ public class ArticleController {
         }
         redisUtils.set(key, commentId.toString(), 600L);
         commentService.commentGood(commentId);
+        return ResultResponse.getSuccessResult("点赞成功");
+    }
+
+    @PostMapping("/good")
+    public Result articletGood(@RequestParam Long articleId, HttpServletRequest request) {
+        String realIp = IpUtil.getRealIp(request);
+        String key = articleId +"/"+ realIp;
+        if (redisUtils.exists(key)) {
+            return ResultResponse.getFailResult("不允许重复点赞");
+        }
+        redisUtils.set(key, articleId.toString(), 600L);
+        //todo 改成点赞文章
+        //commentService.commentGood(commentId);
         return ResultResponse.getSuccessResult("点赞成功");
     }
 
