@@ -39,6 +39,7 @@ public class Article implements Serializable {
     @Lob
     @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
+    private Integer goods = 0;
     @CreatedDate
     private Date createTime;
     @LastModifiedDate

@@ -4,6 +4,9 @@ import com.blog.entity.Comment;
 import com.blog.repository.CommentRepository;
 import com.blog.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @ClassName CommentServiceImpl
@@ -35,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> listComments(Long articleId) {
+    public Page<Comment> listComments(Long articleId, int pageNum) {
         Specification<Comment> specification = new Specification<Comment>() {
             @Override
             public Predicate toPredicate(Root<Comment> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -47,12 +51,17 @@ public class CommentServiceImpl implements CommentService {
                 return query.where(predicates.toArray(new Predicate[0])).getRestriction();
             }
         };
-        return commentRepository.findAll(specification, Sort.by(Sort.Direction.ASC, "createTime"));
+        Pageable pageable = PageRequest.of(pageNum, 10, Sort.by(Sort.Direction.ASC, "createTime"));
+        return commentRepository.findAll(specification, pageable);
     }
 
     @Override
     public void commentGood(Long commentId) {
         //todo 这里是否要判断评论id不存在的情况
+        Optional<Comment> comment1 = commentRepository.findById(commentId);
+        if (!comment1.isPresent()) {
+            throw new RuntimeException("评论不存在");
+        }
         Comment comment = commentRepository.findById(commentId).get();
         comment.setGoods(comment.getGoods() +1);
         commentRepository.save(comment);

@@ -1,6 +1,7 @@
 package com.blog.service;
 
 import com.blog.entity.Comment;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +14,6 @@ import java.util.List;
  **/
 public interface CommentService {
     void save(Comment comment);
-    List<Comment> listComments(Long articleId);
+    Page<Comment> listComments(Long articleId, int pageNum);
     void commentGood(Long commentId);
 }
