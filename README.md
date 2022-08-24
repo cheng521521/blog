@@ -235,7 +235,7 @@ curl --location --request POST 'http://localhost:8081/arricle/good?articleId=2' 
 {
     "code": 200,
     "message": "SUCCESS",
-    "data": "评论成功"
+    "data": "点赞成功"
 }
 ~~~
 ## 点赞评论
@@ -326,10 +326,10 @@ curl --location --request GET 'http://localhost:8081/arricle/get/comments?articl
 GET http://localhost:8081/arricle/search
 ~~~
 #### 请求参数
-|    参数    |   类型   | 释义  |
-|:--------:|:------:|:---:|
-| *keyword | String | 关键字 |
-| pageNum  |  int   | 1页数 |
+|    参数    |   类型   |  释义  |
+|:--------:|:------:|:----:|
+| *keyword | String | 关键字  |
+| pageNum  |  int   | 起始页数 |
 #### 请求体
 无
 #### 返回体
