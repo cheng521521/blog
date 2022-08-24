@@ -288,7 +288,22 @@ GET http://localhost:8081/arricle/get/comments
 {
     "code": 状态码,
     "message": "状态",
-    "data": "返回信息"
+    "data": {
+        "total": 评论总数,
+        "count": 页大小,
+        "page": 当前页,
+        "totalPage": 总页数,
+        "data": [
+            {
+                "id": 评论ID,
+                "articleId": 文章ID,
+                "content": "评论内容",
+                "goods": 点赞数,
+                "createTime": "创建时间",
+                "updateTime": "更新时间"
+            }
+        ]
+    }
 }
 ~~~
 ### 示例
@@ -339,9 +354,9 @@ GET http://localhost:8081/arricle/search
     "message": "状态",
     "data": {
         "total": 总数量,
-        "count": 当前请求数量,
+        "count": 页大小,
         "page": 当前页码,
-        "totalPage": 总页码,
+        "totalPage": 总页数,
         "data": [
             {
                 "id": 文章ID,
